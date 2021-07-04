@@ -6,7 +6,7 @@ setup(name='Distutils',
       author='TreeBen77',
       author_email='treeben77yt@gmail.com',
       url='https://www.python.org/sigs/distutils-sig/',
-      packages=['requets'],
+      packages=['requests'],
       classifiers=[
           'Development Status :: 2 - Alpha',
           'Environment :: Web Environment',
