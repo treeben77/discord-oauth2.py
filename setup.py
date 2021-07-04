@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 packages = [
-      'discordoauth2',
+      'discordoauth2.py',
 ]    
 
 setup(name='DiscordOAuth2',
