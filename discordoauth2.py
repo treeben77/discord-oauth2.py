@@ -1,83 +1,72 @@
 import requests
 
-client = dict()
+class token_instance():
+  def __init__(self, access_token, bot_token):
+    self.token = access_token
+    self.bot_token = bot_token
+  
+  def identify(self):
+    try:
+      headers = {
+       'Authorization': f'Bearer {self.token}'
+      }
+      user_object = requests.get(url="https://discordapp.com/api/users/@me",headers=headers)
+      return user_object.json()
+    except(requests.exceptions.HTTPError) as error:
+      return error
 
-def client(payload):
-  global client
-  client = {
-  'id': str(payload['client_id']),
-  'secret': payload['client_secret'],
-  'redirect_uri': payload['redirect_uri'],
-  'token': payload['bot_token']
-}
-endpoint = 'https://discord.com/api/v8'
+  def connections(self):
+    try:
+      headers = {
+        'Authorization': f'Bearer {self.token}'
+      }
+      user_object = requests.get(url="https://discordapp.com/api/users/@me/connections",headers=headers)
+      return user_object.json()
+    except(requests.exceptions.HTTPError) as error:
+      return error
 
-def exchange_code(token):
-  data = {
-    'client_id': client['id'],
-    'client_secret': client['secret'],
-    'grant_type': 'authorization_code',
-    'code': token,
-    'redirect_uri': client['redirect_uri']
-  }
-  headers = {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-  return requests.post(endpoint+'/oauth2/token', data=data, headers=headers).json()
+  def guilds(self):
+    try:
+      headers = {
+          'Authorization': f'Bearer {self.token}'
+        }
+      user_object = requests.get(url="https://discordapp.com/api/users/@me/guilds",headers=headers)
+      return user_object.json()
+    except(requests.exceptions.HTTPError) as error:
+      return error
 
-def refresh_token(token):
-  data = {
-    'client_id': client['id'],
-    'client_secret': client['secret'],
-    'grant_type': 'authorization_code',
-    'code': token
-  }
-  headers = {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-  r = requests.post(endpoint+'/oauth2/token', data=data, headers=headers)
-  return r.json()
+  def join_guild(self, guild):
+    try:
+      headers = {
+        'Authorization': f'Bot {self.bot_token}',
+        'Content-Type': 'application/json'
+      }
+      data = {
+        'access_token': self.token
+      }
+      user_object = requests.put(url=f"https://discordapp.com/api/guilds/{guild}/members/{self.identify}", json=data, headers=headers)
+      return user_object.text
+    except(requests.exceptions.HTTPError) as error:
+      return error
 
-def get_identify(access_token):
-  try:
-    headers = {
-      'Authorization': f'Bearer {access_token}'
-    }
-    user_object = requests.get(url="https://discordapp.com/api/users/@me",headers=headers)
-    return user_object.json()
-  except(requests.exceptions.HTTPError) as error:
-    return error
-
-def get_connections(access_token):
-  try:
-    headers = {
-      'Authorization': f'Bearer {access_token}'
-    }
-    user_object = requests.get(url="https://discordapp.com/api/users/@me/connections",headers=headers)
-    return user_object.json()
-  except(requests.exceptions.HTTPError) as error:
-    return error
-
-def get_guilds(access_token):
-  try:
-    headers = {
-      'Authorization': f'Bearer {access_token}'
-    }
-    user_object = requests.get(url="https://discordapp.com/api/users/@me/guilds",headers=headers)
-    return user_object.json()
-  except(requests.exceptions.HTTPError) as error:
-    return error
-
-def join_guild(access_token, guild):
-  try:
-    headers = {
-      'Authorization': f'Bot {client["token"]}',
-      'Content-Type': 'application/json'
-    }
+class discordOauth2():
+  endpoint = 'https://discord.com/api/v8'
+  def __init__(self, client, secret, redirect, token=None):
+    self.client = client
+    self.secret = secret
+    self.redirect = redirect
+    self.token = token
+  
+  def exchange_code(self, token):
     data = {
-      'access_token': access_token
+      'client_id': self.client,
+      'client_secret': self.secret,
+      'grant_type': 'authorization_code',
+      'code': token,
+      'redirect_uri': self.redirect
     }
-    user_object = requests.put(url=f"https://discordapp.com/api/guilds/{guild}/members/{get_identify(access_token)['id']}", json=data, headers=headers)
-    return user_object.text
-  except(requests.exceptions.HTTPError) as error:
-    return error
+    headers = {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    data = requests.post(discordOauth2.endpoint+'/oauth2/token', data=data, headers=headers).json()
+    return token_instance(data['access_token'], self.token)
