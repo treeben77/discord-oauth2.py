@@ -1,9 +1,14 @@
 from distutils.core import setup
 
+packages = [
+      'discordoauth2',
+]    
+
 setup(name='DiscordOAuth2',
       version='0.2a',
       description='DiscordOAuth2.py',
       author='TreeBen77',
+      packages=packages
       author_email='treeben77yt@gmail.com',
       url='https://www.python.org/sigs/distutils-sig/',
       classifiers=[
@@ -15,7 +20,3 @@ setup(name='DiscordOAuth2',
           'Topic :: Communications :: Email',
           ],
      )
-
-packages = [
-      'discordoauth2',
-]      
