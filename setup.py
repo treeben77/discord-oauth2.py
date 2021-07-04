@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='Distutils',
+setup(name='DiscordOAuth2',
       version='0.2a',
       description='DiscordOAuth2.py',
       author='TreeBen77',
@@ -15,3 +15,7 @@ setup(name='Distutils',
           'Topic :: Communications :: Email',
           ],
      )
+
+packages = [
+      'discordoauth2',
+]      
