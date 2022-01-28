@@ -2,36 +2,40 @@
 Use Discord's OAuth2 effortlessly! Turns the auth code to a access token and the access token into scope infomation.
 
 ### Using DiscordOAuth2.py with Flask
+You can try out a working example here: https://DiscordOAuth2py.treeben77.repl.co
 ```python
 from flask import Flask, redirect, request
-from threading import Thread
 from discordoauth2 import discordOauth2
 import os
 
 app = Flask('Discord OAuth2 Example')
-client = discordOauth2(client=159985870458322944, secret=os.environ['oauth2_secret'],
- redirect="https://example.com", token=os.environ['bot_token'])
-#Replace the int above with your application's client ID and the redirect with the redirect URL with the redirect URL this flask hosts. add your oauth2 secret and bot token to a .env file.
-#token could be None. token must be a valid Bot Token or None. Only required if your application adds users to a guild.
+client = discordOauth2(client=your-client-id, secret="your-client-secret",
+redirect="your-redirect-url", token="your-bot-token (optional)")
+# Replace your-client-id with your application's client id, replace your-client-secret with your client secret and replace your-redirect-url with the url that discord will redirect users to once they complete OAuth2.
+# If you want to add users to a guild, insert a bot token with CREATE_INSTANT_INVITE permissions in the guilds you want to add users to.
 
 @app.route('/')
 def main():
-  return redirect("https://discord.com/api/oauth2/authorize?client_id=159985870458322944&redirect_uri=https%3A%2F%2Fexample.com%2Foauth2&response_type=code&scope=identify%20email%20connections%20guilds%20guilds.join")
+  # Your OAuth2 url, you can make one a https://discord.dev
+  return redirect("https://discord.com/api/oauth2/authorize")
 
 @app.route('/oauth2')
 def oauth():
-  code = request.args.get('code')
-  tokenObject = client.exchange_code(token=code)
+  tokenObject = client.exchange_code(token=request.args.get('code'))
+  print("refresh token: "+tokenObject.refresh_token)
   
-  identify = tokenObject.identify()
-  connections = tokenObject.connections()
-  guilds = tokenObject.guilds()
-  tokenObject.join_guild(336642139381301249)
-  return f"{identify}<br/><br/>{connections}<br/><br/>{guilds}"
+  # returns basic data about the user, including username, avatar and badges, if the email scope was parsed, it will also return their email.
+  identify = tokenObject.access.identify()
+  # returns visible and hidden connections such as GitHub, YouTube or Twitter.
+  connections = tokenObject.access.connections()
+  # returns a list of guilds that the user is in
+  guilds = tokenObject.access.guilds()
+  # returns a member object for the provided guild
+  guilds_member = tokenObject.access.guilds_member(guilds[0]["id"])
+  # makes a user join a guild, bot token provided must have CREATE_INSTANT_INVITE in that guild
+  tokenObject.access.guilds_join(guild-id-here)
 
-def run():
-  app.run(host="0.0.0.0", port=8080)
+  return f"{identify}<br><br>{connections}<br><br>{guilds}<br><br>guild data for the first guild: {guilds_member}"
 
-server = Thread(target=run)
-server.start()
+app.run(host="0.0.0.0", port=8080)
 ```
