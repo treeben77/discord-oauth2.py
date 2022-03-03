@@ -1,6 +1,8 @@
 # DiscordOAuth2.py
 Use Discord's OAuth2 effortlessly! Turns the auth code to a access token and the access token into scope infomation.
 
+> **Notice:** I don't know how to make my library work with `pip install` so you'll have to copy the source code and paste it into your workspace.
+
 ### Using DiscordOAuth2.py with Flask
 You can try out a working example here: https://DiscordOAuth2py.treeben77.repl.co
 ```python
