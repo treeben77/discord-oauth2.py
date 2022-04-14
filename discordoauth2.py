@@ -63,6 +63,11 @@ class access_token():
     self.access = token_instance(response["access_token"], token)
     self.expires = response["expires_in"]
     self.refresh_token = response["refresh_token"]
+    
+    try: self.webhook = response["webhook"]
+    except(KeyError): self.webhook = None
+    try: self.guild = response["guild"]
+    except(KeyError): self.guild = None
 
 class discordOauth2():
   def __init__(self, client, secret, redirect, token=None):
@@ -80,6 +85,7 @@ class discordOauth2():
       'redirect_uri': self.redirect
     })
     if response.status_code == 429: raise Exception(f"You are being Rate Limited")
+    elif response.status_code != 200: raise Exception(f"Something went wrong. Status Code: {response.status_code}")
     return access_token(response.json(), self.token)
   
   def refresh_token(self, refresh_token):
@@ -90,4 +96,5 @@ class discordOauth2():
       'refresh_token': refresh_token
     })
     if response.status_code == 429: raise Exception(f"You are being Rate Limited")
+    elif response.status_code != 200: raise Exception(f"Something went wrong. Status Code: {response.status_code}")
     return access_token(response.json(), self.token)
