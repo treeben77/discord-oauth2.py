@@ -1,143 +1,148 @@
 import requests
 
-# class User():
-#   def __init__(self, data: dict):
-#     self.id = int(data["id"])
-#     self.username = data["username"]
-#     self.avatar = data.get("avatar")
-#     self.discriminator = data["discriminator"]
-#     self.public_flags = data.get("public_flags")
-#     self.flags = data.get("flags")
-#     self.banner = data.get("banner")
-#     self.accent_color = data.get("accent_color")
-#     self.locale = data.get("locale")
-#     self.mfa_enabled = data.get("mfa_enabled")
-#     self.nitro_type = data.get("premium_type")
-#     self.email = data.get("email")
-#     self.email_verified = data.get("verified")
-  
-#   @property
-#   def avatar_url(self):
-#     if not self.avatar: return None
-#     return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.{'png' if not self.avatar.startswith('a_') else '.gif'}?size=1024" 
-
-#   @property
-#   def banner_url(self):
-#     if not self.banner: return None
-#     return f"https://cdn.discordapp.com/banners/{self.id}/{self.banner}.{'png' if not self.avatar.startswith('a_') else '.gif'}?size=1024" 
-
-class access_token():
-  def __init__(self, response, client):
-    self.client = client
-    self.expires = response["expires_in"]
-    self.token = response["access_token"]
-    self.scope = response["scope"].split(" ")
-    self.refresh_token = response["refresh_token"]
+class PartialAccessToken():
+    def __init__(self, access_token, client) -> None:
+        self.client: Client = client
+        self.token = access_token
     
-    self.webhook = response.get("webhook")
-    self.guild = response.get("guild")
+    def fetch_identify(self):
+        response = requests.get("https://discord.com/api/v10/users/@me", headers={
+            "authorization": f"Bearer {self.token}"
+        })
 
-    self.__identify_cache = None
-  
-  def identify(self):
-    if not "identify" in self.scope: raise exceptions.MissingScope(f"identify scope wasn't granted")
-    response = requests.get(url="https://discord.com/api/v10/users/@me",headers={
-      'Authorization': f'Bearer {self.token}'
-    })
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def fetch_connections(self):
+        response = requests.get("https://discord.com/api/v10/users/@me/connections", headers={
+            "authorization": f"Bearer {self.token}"
+        })
 
-    if response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}")
-    elif not response.ok: raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    user =  response.json()
-    self.__identify_cache = user
-    return user
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def fetch_guilds(self):
+        response = requests.get("https://discord.com/api/v10/users/@me/guilds", headers={
+            "authorization": f"Bearer {self.token}"
+        })
 
-  def connections(self):
-    if not "connections" in self.scope: raise exceptions.MissingScope(f"connections scope wasn't granted")
-    response = requests.get(url="https://discord.com/api/v10/users/@me/connections", headers={
-      'Authorization': f'Bearer {self.token}'
-    })
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def fetch_guild_member(self, guild_id):
+        response = requests.get(f"https://discord.com/api/v10/users/@me/guilds/{guild_id}/member", headers={
+            "authorization": f"Bearer {self.token}"
+        })
 
-    if response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}")
-    elif not response.ok: raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    return response.json()
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 404: raise exceptions.HTTPException(f"user is not in this guild.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def join_guild(self, guild_id, nick = None, role_ids = None, mute = False, deaf = False):
+        response = requests.put(f"https://discord.com/api/v10/guilds/{guild_id}/members/621878678405775379", headers={
+            "authorization": f"Bot {self.client._Client__bot_token}"
+        }, json={
+            "access_token": self.token,
+            "nick": nick,
+            "roles": role_ids,
+            "mute": mute,
+            "deaf": deaf,
+        })
 
-  def guilds(self):
-    if not "guilds" in self.scope: raise exceptions.MissingScope(f"guilds scope wasn't granted")
-    response = requests.get(url="https://discord.com/api/v10/users/@me/guilds",headers={
-        'Authorization': f'Bearer {self.token}'
-      })
-    if response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}")
-    elif not response.ok: raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    return response.json()
+        if response.status_code == 204:
+            raise exceptions.HTTPException(f"member is already in the guild.")
+        elif response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 403: raise exceptions.Forbidden(f"the Bot token must be for a bot in the guild that has permissions to create invites in the target guild and must have any other required permissions.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
 
-  def guilds_member(self, guild):
-    if not "guilds.members.read" in self.scope: raise exceptions.MissingScope(f"guilds.members.read scope wasn't granted")
-    response = requests.get(url=f"https://discord.com/api/v10/users/@me/guilds/{guild}/member",headers={
-        'Authorization': f'Bearer {self.token}'
-      })
-    if response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}")
-    elif not response.ok: raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    return response.json()
-  
-  def guilds_join(self, guild):
-    if not self.__identify_cache: raise exceptions.BaseException(f"you must call identify before guilds.join!") 
-    if not "guilds.join" in self.scope: raise exceptions.MissingScope(f"guilds.join scope wasn't granted")
-    response = requests.put(url=f"https://discord.com/api/v10/guilds/{guild}/members/{self.__identify_cache['id']}", json={
-      'Authorization': f'Bot {self.client.bot_token}',
-    }, headers={
-      'access_token': self.token
-    })
+class AccessToken(PartialAccessToken):
+    def __init__(self, data: dict, client) -> None:
+        super().__init__(data["access_token"], client)
 
-    if response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}")
-    elif not response.ok: raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    return response.json()
+        self.expires = data.get("expires_in")
+        self.scope = data.get("scope", "").split(" ")
+        self.refresh_token = data.get("refresh_token")
+        self.webhook = data.get("webhook")
+        self.guild = data.get("guild")
 
 class Client():
-  def __init__(self, id, secret, redirect, bot_token=None):
-    self.id = id
-    self.secret = secret
-    self.redirect = redirect
-    self.bot_token = bot_token
-  
-  def exchange_code(self, token):
-    response = requests.post("https://discord.com/api/v10/oauth2/token", data={
-      'client_id': self.id,
-      'client_secret': self.secret,
-      'grant_type': 'authorization_code',
-      'code': token,
-      'redirect_uri': self.redirect
-    })
-
-    if response.status_code == 429: raise Exception(f"You are being Rate Limited")
-    elif response.status_code != 200: raise Exception(f"Something went wrong. Status Code: {response.status_code}")
-    return access_token(response.json(), self)
-  
-  def refresh_token(self, refresh_token):
-    response = requests.post("https://discord.com/api/v10/oauth2/token", data={
-      'client_id': self.id,
-      'client_secret': self.secret,
-      'grant_type': 'refresh_token',
-      'refresh_token': refresh_token
-    })
+    def __init__(self, id, secret, redirect, bot_token=None):
+        self.id = id
+        self.redirect_url = redirect
+        self.__secret = secret
+        self.__bot_token = bot_token
     
-    if response.status_code == 429: raise Exception(f"You are being Rate Limited")
-    elif response.status_code != 200: raise Exception(f"Something went wrong. Status Code: {response.status_code}")
-    return access_token(response.json(), self)
-  
+    def from_access_token(self, access_token):
+        return PartialAccessToken(access_token, self)
+    
+    def exchange_code(self, code):
+        response = requests.post("https://discord.com/api/v10/oauth2/token", data={
+            "grant_type": "authorization_code", "code": code,
+            "client_id": self.id, "client_secret": self.__secret,
+            "redirect_uri": self.redirect_url})
+
+        if response.ok:
+            return AccessToken(response.json(), self)
+        elif response.status_code == 400: raise exceptions.HTTPException("the code, client id, client secret or the redirect uri is invalid/don't match.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")    
+
+    def refresh_token(self, refresh_token):
+        response = requests.post("https://discord.com/api/v10/oauth2/token", data={
+            "grant_type": "refresh_token", "refresh_token": refresh_token,
+            "client_id": self.id, "client_secret": self.__secret})
+        
+        if response.ok:
+            return AccessToken(response.json(), self)
+        elif response.status_code == 400: raise exceptions.HTTPException("the refresh token, client id or client secret is invalid/don't match.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def client_credentails_grant(self, scope):
+        response = requests.post("https://discord.com/api/v10/oauth2/token", data={
+            "grant_type": "client_credentials", "scope": " ".join(scope)},
+            auth=(self.id, self.__secret))
+        
+        if response.ok:
+            return AccessToken(response.json(), self)
+        elif response.status_code == 400: raise exceptions.HTTPException("the scope, client id or client secret is invalid/don't match.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+
 class exceptions():
-  class BaseException(Exception):
-    pass
+    class BaseException(Exception):
+        pass
 
-  class HTTPException(BaseException):
-    pass
+    class HTTPException(BaseException):
+        pass
 
-  class RateLimited(HTTPException):
-    def __init__(self, text, retry_after):
-      self.retry_after = retry_after
-      super().__init__(text)
+    class RateLimited(HTTPException):
+        def __init__(self, text, retry_after):
+            self.retry_after = retry_after
+            super().__init__(text)
   
-  class Forbidden(HTTPException):
-    pass
-
-  class MissingScope(BaseException):
-    pass
+    class Forbidden(HTTPException):
+        pass
