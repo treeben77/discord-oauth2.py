@@ -2,7 +2,7 @@ import requests
 
 class PartialAccessToken():
     def __init__(self, access_token, client) -> None:
-        self.client: Client = client
+        self.client = client
         self.token = access_token
     
     def fetch_identify(self):
@@ -74,9 +74,24 @@ class PartialAccessToken():
         elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def update_role_connections(self, platform_name=None, username=None, **metadata):
+        response = requests.put(f"https://discord.com/api/v10/users/@me/applications/{self.client.id}/role-connection", headers={
+            "authorization": f"Bearer {self.token}"}, json={
+                "platform_name": platform_name,
+                "platform_username": username,
+                "metadata": metadata
+            })
+
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
 
 class AccessToken(PartialAccessToken):
-    def __init__(self, data: dict, client) -> None:
+    def __init__(self, data, client) -> None:
         super().__init__(data["access_token"], client)
 
         self.expires = data.get("expires_in")
@@ -91,6 +106,10 @@ class Client():
         self.redirect_url = redirect
         self.__secret = secret
         self.__bot_token = bot_token
+
+    def update_linked_roles_metadata(self, metadata):
+        requests.put(f"https://discord.com/api/v10/applications/{self.id}/role-connections/metadata", headers={
+            "authorization": f"Bot {self.__bot_token}"}, json=metadata)
     
     def from_access_token(self, access_token):
         return PartialAccessToken(access_token, self)
