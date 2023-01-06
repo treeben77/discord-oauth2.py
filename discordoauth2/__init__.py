@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 class PartialAccessToken():
     def __init__(self, access_token, client) -> None:
@@ -76,11 +77,18 @@ class PartialAccessToken():
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
     def update_role_connections(self, platform_name=None, username=None, **metadata):
+        def metadataTypeHook(item):
+            print(item, type(item), type(type(item)))
+            if type(item) == bool:
+                return 1 if item else 0
+            if type(item) == datetime:
+                return item.isoformat()
+            else: return item
         response = requests.put(f"https://discord.com/api/v10/users/@me/applications/{self.client.id}/role-connection", headers={
             "authorization": f"Bearer {self.token}"}, json={
                 "platform_name": platform_name,
                 "platform_username": username,
-                "metadata": metadata
+                "metadata": {key: metadataTypeHook(value) for key, value in metadata.items()}
             })
 
         if response.ok:

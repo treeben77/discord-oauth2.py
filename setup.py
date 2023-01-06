@@ -6,7 +6,7 @@ with open("README.md", "r") as file:
 setup(
     name='discord-oauth2.py',
     description='Use Discord\'s OAuth2 effortlessly! Turns the auth code to a access token and the access token into scope infomation. ',
-    version="1.0.0",
+    version="1.1.0",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='MIT',
