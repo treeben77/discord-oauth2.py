@@ -5,6 +5,9 @@ class PartialAccessToken():
     def __init__(self, access_token, client) -> None:
         self.client = client
         self.token = access_token
+
+    def revoke(self):
+        return self.client.revoke_token(self.token, token_type="access_token")
     
     def fetch_identify(self):
         response = requests.get("https://discord.com/api/v10/users/@me", headers={
@@ -107,6 +110,9 @@ class AccessToken(PartialAccessToken):
         self.refresh_token = data.get("refresh_token")
         self.webhook = data.get("webhook")
         self.guild = data.get("guild")
+    
+    def revoke_refresh_token(self):
+        return self.client.revoke_token(self.refresh_token, token_type="refresh_token")
 
 class Client():
     def __init__(self, id, secret, redirect, bot_token=None):
@@ -151,10 +157,21 @@ class Client():
         response = requests.post("https://discord.com/api/v10/oauth2/token", data={
             "grant_type": "client_credentials", "scope": " ".join(scope)},
             auth=(self.id, self.__secret))
-        
         if response.ok:
             return AccessToken(response.json(), self)
         elif response.status_code == 400: raise exceptions.HTTPException("the scope, client id or client secret is invalid/don't match.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def revoke_token(self, token, token_type=None):
+        response = requests.post("https://discord.com/api/oauth2/token/revoke",
+            data={"token": token, "token_type_hint": token_type},
+            auth=(self.id, self.__secret))
+        print(response.status_code, response.text)
+        if response.ok:
+            return
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
         elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
