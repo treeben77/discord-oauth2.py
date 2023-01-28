@@ -79,7 +79,7 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def update_role_connections(self, platform_name=None, username=None, **metadata):
+    def update_metadata(self, platform_name=None, username=None, **metadata):
         def metadataTypeHook(item):
             print(item, type(item), type(type(item)))
             if type(item) == bool:
