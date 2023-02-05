@@ -81,7 +81,6 @@ class PartialAccessToken():
     
     def update_metadata(self, platform_name=None, username=None, **metadata):
         def metadataTypeHook(item):
-            print(item, type(item), type(type(item)))
             if type(item) == bool:
                 return 1 if item else 0
             if type(item) == datetime:
