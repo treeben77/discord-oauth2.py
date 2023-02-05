@@ -58,8 +58,8 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def join_guild(self, guild_id, nick = None, role_ids = None, mute = False, deaf = False):
-        response = requests.put(f"https://discord.com/api/v10/guilds/{guild_id}/members/621878678405775379", headers={
+    def join_guild(self, guild_id, user_id, nick = None, role_ids = None, mute = False, deaf = False):
+        response = requests.put(f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}", headers={
             "authorization": f"Bot {self.client._Client__bot_token}"
         }, json={
             "access_token": self.token,
