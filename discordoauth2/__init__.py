@@ -1,15 +1,18 @@
 import requests
 from datetime import datetime
+from typing import Optional
 
 class PartialAccessToken():
     def __init__(self, access_token, client) -> None:
-        self.client = client
-        self.token = access_token
+        self.client: Client = client
+        self.token: str = access_token
 
     def revoke(self):
+        """Shorthand for `Client.revoke_token` with the `PartialAccessToken`'s access token."""
         return self.client.revoke_token(self.token, token_type="access_token")
     
-    def fetch_identify(self):
+    def fetch_identify(self) -> dict:
+        """Retrieves the user's [user object](https://discord.com/developers/docs/resources/user#user-object). Requires the `identify` scope and the `email` scope for their email address"""
         response = requests.get("https://discord.com/api/v10/users/@me", headers={
             "authorization": f"Bearer {self.token}"
         })
@@ -21,7 +24,8 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def fetch_connections(self):
+    def fetch_connections(self) -> list[dict]:
+        """Retrieves a list of [connection object](https://discord.com/developers/docs/resources/user#connection-object)s the user has linked. Requires the `connections` scope"""
         response = requests.get("https://discord.com/api/v10/users/@me/connections", headers={
             "authorization": f"Bearer {self.token}"
         })
@@ -33,7 +37,9 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def fetch_guilds(self):
+    def fetch_guilds(self) -> list[dict]:
+        """Retrieves a list of [partial guild](https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild)s the user is in. Requires the `guilds` scope"""
+
         response = requests.get("https://discord.com/api/v10/users/@me/guilds", headers={
             "authorization": f"Bearer {self.token}"
         })
@@ -45,7 +51,11 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def fetch_guild_member(self, guild_id):
+    def fetch_guild_member(self, guild_id: int) -> dict:
+        """Retrieves the user's [guild member object](https://discord.com/developers/docs/resources/guild#guild-member-object) in a specific guild. Requires the `guilds.members.read` scope
+        
+        guild_id: The guild ID to fetch member info for
+        """
         response = requests.get(f"https://discord.com/api/v10/users/@me/guilds/{guild_id}/member", headers={
             "authorization": f"Bearer {self.token}"
         })
@@ -58,7 +68,16 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def join_guild(self, guild_id, user_id, nick = None, role_ids = None, mute = False, deaf = False):
+    def join_guild(self, guild_id: int, user_id: int, nick: str = None, role_ids: list[int] = None, mute: bool = False, deaf: bool = False) -> dict:
+        """Adds the user to a guild. Requires the `guilds.join` scope and `Client` must have a bot token, and the bot must have `CREATE_INSTANT_INVITE` in the guild it wants to add the member to. Returns a [guild member object](https://discord.com/developers/docs/resources/guild#guild-member-object)
+        
+        guild_id: The guild ID to add the user to
+        user_id: The ID of the user. Retrievable with `PartialAccessToken.fetch_identify()['id']`
+        nick: The nickname to give the user apon joining. Bot must also have `MANAGE_NICKNAMES`
+        role_ids: A list of role IDs to give the user apon joining (bypasses Membership Screening). Bot must also have `MANAGE_ROLES`
+        mute: Wether the user is muted in voice channels apon joining. Bot must also have `MUTE_MEMBERS`
+        deaf: Wether the user is deaf in voice channels apon joining. Bot must also have `DEAFEN_MEMBERS`
+        """
         response = requests.put(f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}", headers={
             "authorization": f"Bot {self.client._Client__bot_token}"
         }, json={
@@ -78,10 +97,15 @@ class PartialAccessToken():
         elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
-    
-    def update_metadata(self, platform_name=None, username=None, **metadata):
+
+    def update_metadata(self, platform_name: str=None, username: str=None, **metadata) -> list[dict]:
+        """Updates the user's metadata for this application. Requires the `role_connections.write` scope
+        
+        platform_name: the platform's name. Appears in full capitals at the top of the application box in the client.
+        username: the user's name on the platform. Appears below the platform name,
+        metadata: key and value pairs for metadata. Allows `bool`, `int`, `datetime`, and `str` (only iso timestamps) values.
+        """
         def metadataTypeHook(item):
-            print(item, type(item), type(type(item)))
             if type(item) == bool:
                 return 1 if item else 0
             if type(item) == datetime:
@@ -105,13 +129,14 @@ class AccessToken(PartialAccessToken):
     def __init__(self, data, client) -> None:
         super().__init__(data["access_token"], client)
 
-        self.expires = data.get("expires_in")
-        self.scope = data.get("scope", "").split(" ")
-        self.refresh_token = data.get("refresh_token")
-        self.webhook = data.get("webhook")
-        self.guild = data.get("guild")
+        self.expires: int = data.get("expires_in")
+        self.scope: list[str] = data.get("scope", "").split(" ")
+        self.refresh_token: str = data.get("refresh_token")
+        self.webhook: Optional[dict] = data.get("webhook")
+        self.guild: Optional[dict] = data.get("guild")
     
     def revoke_refresh_token(self):
+        """Shorthand for `Client.revoke_token` with the `AccessToken`'s refresh token."""
         return self.client.revoke_token(self.refresh_token, token_type="refresh_token")
 
 class Client():
@@ -131,15 +156,23 @@ class Client():
     def update_linked_roles_metadata(self, metadata: list[dict]):
         """Updates the application's linked roles metadata.
         
-        metadata: List of 
+        metadata: List of [application role connection metadata](https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object)
         """
         requests.put(f"https://discord.com/api/v10/applications/{self.id}/role-connections/metadata", headers={
             "authorization": f"Bot {self.__bot_token}"}, json=metadata)
     
-    def from_access_token(self, access_token):
+    def from_access_token(self, access_token: str) -> PartialAccessToken:
+        """Creates a `PartialAccessToken` from a access token string.
+        
+        access_token: access token from `PartialAccessToken.token`
+        """
         return PartialAccessToken(access_token, self)
     
-    def exchange_code(self, code):
+    def exchange_code(self, code: str) -> AccessToken:
+        """Converts a code from the redirect url into a `AccessToken`
+        
+        code: `code` paramater from OAuth2 redirect URL
+        """
         response = requests.post("https://discord.com/api/v10/oauth2/token", data={
             "grant_type": "authorization_code", "code": code,
             "client_id": self.id, "client_secret": self.__secret,
@@ -152,7 +185,11 @@ class Client():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")    
 
-    def refresh_token(self, refresh_token):
+    def refresh_token(self, refresh_token: str) -> AccessToken:
+        """Converts a refresh token into a new `AccessToken`
+
+        refresh_token: refresh token from `AccessToken.refresh_token`
+        """
         response = requests.post("https://discord.com/api/v10/oauth2/token", data={
             "grant_type": "refresh_token", "refresh_token": refresh_token,
             "client_id": self.id, "client_secret": self.__secret})
@@ -164,7 +201,11 @@ class Client():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def client_credentails_grant(self, scope):
+    def client_credentails_grant(self, scope: list[str]) -> AccessToken:
+        """Creates an `AccessToken` on behalf of the application's owner. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
+        
+        scope: list of string scopes to authorize.
+        """
         response = requests.post("https://discord.com/api/v10/oauth2/token", data={
             "grant_type": "client_credentials", "scope": " ".join(scope)},
             auth=(self.id, self.__secret))
@@ -175,7 +216,12 @@ class Client():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def revoke_token(self, token, token_type=None):
+    def revoke_token(self, token: str, token_type: str=None):
+        """Revokes a OAuth2 token related to the client.
+        
+        token: the token string to be revoked.
+        token_type: the type of token to be revoked. This may be ignored by Discord.
+        """
         response = requests.post("https://discord.com/api/oauth2/token/revoke",
             data={"token": token, "token_type_hint": token_type},
             auth=(self.id, self.__secret))
