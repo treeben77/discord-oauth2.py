@@ -64,4 +64,4 @@ Client
 
       If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
          
-   .. autofunction:: discordoauth2.revoke_token
+   .. automethod:: discordoauth2.revoke_token
