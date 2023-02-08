@@ -98,6 +98,17 @@ class PartialAccessToken():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
 
+    def fetch_metadata(self):
+        """Retrieves the user's [metadata](https://discord.com/developers/docs/resources/user#application-role-connection-object) for this application. Requires the `role_connections.write` scope"""
+        response = requests.get(f"https://discord.com/api/v10/users/@me/applications/{self.client.id}/role-connection", headers={"authorization": f"Bearer {self.token}"})
+
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
     def update_metadata(self, platform_name: str=None, username: str=None, **metadata) -> list[dict]:
         """Updates the user's metadata for this application. Requires the `role_connections.write` scope
         
@@ -117,6 +128,17 @@ class PartialAccessToken():
                 "platform_username": username,
                 "metadata": {key: metadataTypeHook(value) for key, value in metadata.items()}
             })
+
+        if response.ok:
+            return response.json()
+        elif response.status_code == 401: raise exceptions.Forbidden(f"this AccessToken does not have the nessasary scope.")
+        elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
+        else:
+            raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+        
+    def clear_metadata(self):
+        """Clears the user's metadata for this application. Requires the `role_connections.write` scope"""
+        response = requests.put(f"https://discord.com/api/v10/users/@me/applications/{self.client.id}/role-connection", headers={"authorization": f"Bearer {self.token}"}, json={})
 
         if response.ok:
             return response.json()

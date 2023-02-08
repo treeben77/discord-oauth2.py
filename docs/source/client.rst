@@ -5,7 +5,6 @@ Client
 
 .. class:: Client(id, secret, redirect, bot_token=None)
 
-
    :param int id: The application ID
    :param str secret: The applications secret, this should be secret!
    :param str redirect: The redirect URL for oauth2
@@ -65,3 +64,4 @@ Client
 
       If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
          
+   .. autofunction:: discordoauth2.revoke_token
