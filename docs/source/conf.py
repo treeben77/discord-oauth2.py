@@ -6,8 +6,8 @@ project = 'discordoauth2.py'
 copyright = '2022, TreeBen77'
 author = 'TreeBen77'
 
-release = '1.0'
-version = '1.0.1'
+release = '1.1'
+version = '1.1.1'
 
 # -- General configuration
 

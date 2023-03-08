@@ -1,7 +1,7 @@
 Client
 =============================
 
-.. currentmodule:: discord-oauth2.py
+.. currentmodule:: discordoauth2
 
 .. class:: Client(id, secret, redirect, bot_token=None)
 
@@ -16,7 +16,7 @@ Client
 
       :type: int
    
-   .. atribute:: redirect_url
+   .. attribute:: redirect_url
 
       The redirect URL 
 
@@ -82,4 +82,4 @@ Client
 
       .. versionadded:: 1.1
 
-      :param dict metadata: Should be a list of `application role connection metadata<https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>__`
+      :param dict metadata: Should be a list of `application role connection metadata<https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>`__

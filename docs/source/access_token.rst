@@ -1,7 +1,7 @@
 AccessToken
 =============================
 
-.. currentmodule:: discord-oauth2.py
+.. currentmodule:: discordoauth2
 
 .. class:: AccessToken()
 
@@ -11,37 +11,37 @@ AccessToken
 
       :type: :class:`discordoauth2.Client`
    
-   .. atribute:: token
+   .. attribute:: token
 
       The raw token for this AccessToken, you can use :class:`discordoauth2.Client.from_access_token` to use it again.
 
       :type: str
    
-   .. atribute:: expires
+   .. attribute:: expires
 
       The number of seconds until it expires from when the instance was created.
 
       :type: int
    
-   .. atribute:: scope
+   .. attribute:: scope
 
       A list of scopes that are provided.
 
       :type: list[str]
    
-   .. atribute:: refresh_token
+   .. attribute:: refresh_token
 
       The refresh_token for this AccessToken, you can use :class:`discordoauth2.Client.refresh_token` to use this authorization again after it expires.
 
       :type: str
    
-   .. atribute:: webhook
+   .. attribute:: webhook
 
       A `parital webhook object <https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-structure>`__ if they was a ``webhook.incoming`` scope.
 
       :type: dict
    
-   .. atribute:: guild
+   .. attribute:: guild
 
       A `partial guild object <https://discord.com/developers/docs/resources/guild#guild-object-guild-structure>`__ if a bot was added to a guild.
 
@@ -170,37 +170,37 @@ AccessToken
 
       :type: :class:`discordoauth2.Client`
    
-   .. atribute:: token
+   .. attribute:: token
 
       The raw token for this AccessToken, you can use :class:`discordoauth2.Client.from_access_token` to use it again.
 
       :type: str
    
-   .. atribute:: expires
+   .. attribute:: expires
 
       The number of seconds until it expires from when the instance was created.
 
       :type: int
    
-   .. atribute:: scope
+   .. attribute:: scope
 
       A list of scopes that are provided.
 
       :type: list[str]
    
-   .. atribute:: refresh_token
+   .. attribute:: refresh_token
 
       The refresh_token for this AccessToken, you can use :class:`discordoauth2.Client.refresh_token` to use this authorization again after it expires.
 
       :type: str
    
-   .. atribute:: webhook
+   .. attribute:: webhook
 
       A `parital webhook object <https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-structure>`__ if they was a ``webhook.incoming`` scope.
 
       :type: dict
    
-   .. atribute:: guild
+   .. attribute:: guild
 
       A `partial guild object <https://discord.com/developers/docs/resources/guild#guild-object-guild-structure>`__ if a bot was added to a guild.
 
