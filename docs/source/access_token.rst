@@ -96,7 +96,7 @@ AccessToken
       :param bool mute: Wether they should be server muted when they join.
       :param bool deaf: Wether they should be server deafend when they join.
       
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.join scope or the bot isn't in the guild/have the correct permissions.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -111,7 +111,7 @@ AccessToken
    
       .. versionadded:: 1.1
 
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -126,7 +126,7 @@ AccessToken
       :param str platform_username: Text that appears under the platform name, large, and usally denoting the user's name on the platform.
       :param dict metadata: List of keys and values to set the user's metadata. Supported types: :class:`bool`, :class:`datetime.datetime`, :class:`int`
             
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -141,7 +141,7 @@ AccessToken
    
       .. versionadded:: 1.1
       
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -184,7 +184,7 @@ AccessToken
 
       Returns a dictionary with a `user object <https://discord.com/developers/docs/resources/user#user-object-user-structure>`__ which includes ``email`` and ``verified`` (verified email) if the ``email`` scope is provided
    
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the identify scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -193,7 +193,7 @@ AccessToken
 
       Returns a list of `connection objects <https://discord.com/developers/docs/resources/user#connection-object-connection-structure>`__
    
-      :returns: :class:`list`
+      :returns: list[dict]
       :raises discordoauth2.exceptions.HTTPException: The request failed
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the connections scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -203,7 +203,7 @@ AccessToken
 
       Returns a list of partial `guild objects <https://discord.com/developers/docs/resources/guild#guild-object>`__
    
-      :returns: :class:`list`
+      :returns: list[dict]
       :raises discordoauth2.exceptions.HTTPException: The request failed
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -214,7 +214,7 @@ AccessToken
    
       :param int guild_id: The guild ID to retrieve member data from.
 
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -229,7 +229,7 @@ AccessToken
       :param bool mute: Wether they should be server muted when they join.
       :param bool deaf: Wether they should be server deafend when they join.
       
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.join scope or the bot isn't in the guild/have the correct permissions.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -240,7 +240,7 @@ AccessToken
    
       .. versionadded:: 1.1
 
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -255,7 +255,7 @@ AccessToken
       :param str platform_username: Text that appears under the platform name, large, and usally denoting the user's name on the platform.
       :param dict metadata: List of keys and values to set the user's metadata. Supported types: :class:`bool`, :class:`datetime.datetime`, :class:`int`
             
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
@@ -270,7 +270,7 @@ AccessToken
    
       .. versionadded:: 1.1
       
-      :returns: :class:`dict`
+      :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed, possibly because the member is not in the guild.
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.member.read scope.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.

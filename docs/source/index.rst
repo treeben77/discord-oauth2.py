@@ -6,6 +6,8 @@ Table of Contents
 
 .. toctree::
 
+   :maxdepth: 2
+
    client
    access_token
 

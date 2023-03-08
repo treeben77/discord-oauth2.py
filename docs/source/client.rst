@@ -12,7 +12,7 @@ Client
 
    .. attribute:: id 
 
-      The application ID
+      The application's ID
 
       :type: int
    
@@ -42,7 +42,7 @@ Client
    
    .. method:: refresh_token(refresh_token)
 
-      Converts a refresh token into a new `AccessToken`. You should store the refresh token and access token, so you can renew the access token when it expires.
+      Converts a refresh token into a new :class:`discordoauth2.AccessToken`. You should store the refresh token and access token, so you can renew the access token when it expires.
    
       :param str refresh_token: The refresh token, can be found from :attr:`discordoauth2.AccessToken.refresh_token`
 
@@ -52,7 +52,7 @@ Client
    
    .. method:: client_credentails_grant(scope)
 
-      Creates an `AccessToken` on behalf of the application's owner.
+      Creates an :class:`discordoauth2.AccessToken` on behalf of the application's owner.
    
       :param list[str] scope: List of scopes.
 
@@ -62,7 +62,7 @@ Client
    
    .. warning::
 
-      If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
+      If the application is owned by a team, you can only request for the ``identify`` scope. You can also request ``applications.commands.update`, but the library does not support it yet.``
    
    .. method:: revoke_token(token, token_type=None)
 
@@ -82,7 +82,7 @@ Client
 
       .. versionadded:: 1.1
 
-      :param dict metadata: Should be a list of `application role connection metadata<https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>`__
+      :param dict metadata: Should be a list of `application role connection metadata <https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>`__
    
    .. note::
 
