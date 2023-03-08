@@ -62,7 +62,7 @@ Client
    
    .. warning::
 
-      If the application is owned by a team, you can only request for the ``identify`` scope. You can also request ``applications.commands.update`, but the library does not support it yet.``
+      If the application is owned by a team, you can only request for the ``identify`` scope. You can also request ``applications.commands.update``, but the library does not support it yet.``
    
    .. method:: revoke_token(token, token_type=None)
 
