@@ -60,6 +60,10 @@ Client
       :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
+   .. warning::
+
+      If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
+   
    .. method:: revoke_token(token, token_type=None)
 
       Revokes an OAuth2 token related to the client.
@@ -71,10 +75,6 @@ Client
 
       :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
-
-   .. warning::
-
-      If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
    
    .. method:: update_linked_roles_metadata(metadata)
 
@@ -83,3 +83,7 @@ Client
       .. versionadded:: 1.1
 
       :param dict metadata: Should be a list of `application role connection metadata<https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>`__
+   
+   .. note::
+
+      The bot token is required to update metadata.

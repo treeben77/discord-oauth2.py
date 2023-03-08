@@ -101,6 +101,10 @@ AccessToken
       :raises discordoauth2.exceptions.Forbidden: The AccessToken doesn't have the guilds.join scope or the bot isn't in the guild/have the correct permissions.
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
+   .. note::
+
+      The bot token is required to join guilds, and it must have ``CREATE_INSTANT_INVITE`` in the target server.
+
    .. method:: fetch_metadata()
 
       Returns the user's `metadata object <https://discord.com/developers/docs/resources/user#application-role-connection-object>`__ for this application.
@@ -175,36 +179,6 @@ AccessToken
       The raw token for this AccessToken, you can use :class:`discordoauth2.Client.from_access_token` to use it again.
 
       :type: str
-   
-   .. attribute:: expires
-
-      The number of seconds until it expires from when the instance was created.
-
-      :type: int
-   
-   .. attribute:: scope
-
-      A list of scopes that are provided.
-
-      :type: list[str]
-   
-   .. attribute:: refresh_token
-
-      The refresh_token for this AccessToken, you can use :class:`discordoauth2.Client.refresh_token` to use this authorization again after it expires.
-
-      :type: str
-   
-   .. attribute:: webhook
-
-      A `parital webhook object <https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-structure>`__ if they was a ``webhook.incoming`` scope.
-
-      :type: dict
-   
-   .. attribute:: guild
-
-      A `partial guild object <https://discord.com/developers/docs/resources/guild#guild-object-guild-structure>`__ if a bot was added to a guild.
-
-      :type: dict
    
    .. method:: fetch_identify()
 
