@@ -75,3 +75,11 @@ Client
    .. warning::
 
       If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
+   
+   .. method:: update_linked_roles_metadata(metadata)
+
+      Updates the application's linked roles metadata, requires bot token to have been provided.
+
+      .. versionadded:: 1.1
+
+      :param dict metadata: Should be a list of `application role connection metadata<https://discord.com/developers/docs/resources/application-role-connection-metadata#application-role-connection-metadata-object>__`
