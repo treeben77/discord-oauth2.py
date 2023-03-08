@@ -24,7 +24,7 @@ Client
    
    .. method:: from_access_token(access_token)
 
-      Creates a PartialAccessToken object from a code. This is useful so you can store the :attr:`PartialAccessToken.token` and then continue using it.
+      Creates a :class:`discordoauth2.PartialAccessToken` object from a code. This is useful so you can store the :attr:`PartialAccessToken.token` and then continue using it.
    
       :param str access_token: The code from oauth2, it is the code paramater on successful return redirect urls from discord's oauth2.
       
@@ -32,9 +32,9 @@ Client
    
    .. method:: exchange_code(code)
 
-      Creates an AccessToken object from a code.
+      Converts a code from the redirect url into a :class:`discordoauth2.AccessToken`
    
-      :param str code: The code from oauth2, it is the code paramater on successful return redirect urls from discord's oauth2.
+      :param str code: `code` paramater from OAuth2 redirect URL
       
       :returns: :class:`discordoauth2.AccessToken`
       :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
@@ -42,7 +42,7 @@ Client
    
    .. method:: refresh_token(refresh_token)
 
-      Creates an AccessToken object from a refresh_token. Refresh tokens are to refresh the access token when it expires.
+      Converts a refresh token into a new `AccessToken`. You should store the refresh token and access token, so you can renew the access token when it expires.
    
       :param str refresh_token: The refresh token, can be found from :attr:`discordoauth2.AccessToken.refresh_token`
 
@@ -52,16 +52,26 @@ Client
    
    .. method:: client_credentails_grant(scope)
 
-      Creates an AccessToken object for the application's owner with the provided scope.
+      Creates an `AccessToken` on behalf of the application's owner.
    
-      :param list[str] scope: The scope is strings divided by a list.
+      :param list[str] scope: List of scopes.
 
       :returns: :class:`discordoauth2.AccessToken`
+      :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
+      :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
+   
+   .. method:: revoke_token(token, token_type=None)
+
+      Revokes an OAuth2 token related to the client.
+   
+      .. versionadded:: 1.1
+         
+      :param str token: Access/Refresh token to revoke
+      :param Optional[str] token_type: Not required, but should be either ``refresh_token`` or ``access_token``
+
       :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
 
    .. warning::
 
       If the application is owned by a team, you can only request for the `identify` scope. You can also request `applications.commands.update`, but the library does not support it yet.
-         
-   .. automethod:: discordoauth2.revoke_token

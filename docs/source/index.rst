@@ -7,6 +7,7 @@ Table of Contents
 .. toctree::
 
    client
+   access_token
 
 Quickstart
 -------------------------------------------
@@ -26,6 +27,7 @@ Example With Flask
 Don't forget to replace all the client information on line 20 and 21 with your application's own information. You can leave bot token empty if your not adding members to guilds.
 
 .. code::
+   
    import discordoauth2
    from flask import Flask, request
 
