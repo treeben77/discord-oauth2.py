@@ -92,7 +92,7 @@ Client
 
       Creates an authorization uri with client information prefilled.
 
-      .. versionadded:: 1.1
+      .. versionadded:: 1.2
 
       :param Union[str, list[str]] scope: A list, or space-seperated string for the authorization scope
       :param Optional[str] state: State parameter. It is recommended for security.
