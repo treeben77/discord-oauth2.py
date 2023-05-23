@@ -87,3 +87,16 @@ Client
    .. note::
 
       The bot token is required to update metadata.
+   
+   .. method:: generate_uri(metadata)
+
+      Creates an authorization uri with client information prefilled.
+
+      .. versionadded:: 1.1
+
+      :param Union[str, list[str]] scope: A list, or space-seperated string for the authorization scope
+      :param Optional[str] state: State parameter. It is recommended for security.
+      :param Optional[Literal["code", "token"]] response_type: either code, or token. token means the server can't access it, but the client can use it without converting.
+      :param Optional[Union[int, str]] guild_id: the guild ID to add a bot/webhook.
+      :param Optional[bool] disable_guild_select: wether to allow the authorizing user to change the selected guild
+      :param Optional[int] permissions: the permission bitwise integer for the bot being added.

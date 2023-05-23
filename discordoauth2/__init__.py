@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Union, Literal
+from urllib import parse
 
 class PartialAccessToken():
     def __init__(self, access_token, client) -> None:
@@ -254,6 +255,28 @@ class Client():
         elif response.status_code == 429: raise exceptions.RateLimited(f"You are being Rate Limited. Retry after: {response.json()['retry_after']}", retry_after=response.json()['retry_after'])
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
+    
+    def generate_uri(self, scope: Union[str, list[str]], state: Optional[str]=None, response_type: Literal["code", "token"]="code", guild_id=None, disable_guild_select=None, permissions=None) -> str:
+        """Creates an authorization uri with client information prefilled.
+        
+        scope: a string, or list of strings for the scope
+        state: optional state parameter. Optional but recommended.
+        response_type: either code, or token. token means the server can't access it, but the client can use it without converting.
+        guild_id: the guild ID to add a bot/webhook.
+        disable_guild_select: wether to allow the authorizing user to change the selected guild
+        permissions: the permission bitwise integer for the bot being added.
+        """
+        params = {
+            "client_id": self.id,
+            "scope": " ".join(scope) if type(scope) == list else scope,
+            "state": state,
+            "redirect_uri": self.redirect_url,
+            "response_type": response_type,
+            "guild_id": guild_id,
+            "disable_guild_select": disable_guild_select,
+            "permissions": permissions
+        }
+        return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"
 
 class exceptions():
     class BaseException(Exception):

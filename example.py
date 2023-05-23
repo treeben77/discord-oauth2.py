@@ -31,8 +31,7 @@ client.update_linked_roles_metadata([
 
 @app.route('/')
 def main():
-  # Your OAuth2 url, you can make one a https://discord.dev
-  return redirect("https://discord.com/api/oauth2/authorize")
+  return redirect(client.generate_uri(scope=["identify", "connections", "guilds", "guilds.member", "guilds.join", "role_connections.write"]))
 
 @app.route('/oauth2')
 def oauth():

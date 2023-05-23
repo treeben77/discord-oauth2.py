@@ -37,6 +37,10 @@ client.update_linked_roles_metadata([
     }
 ])
 
+@app.route('/')
+def main():
+  return redirect(client.generate_uri(scope=["identify", "connections", "guilds", "role_connections.write"]))
+
 @app.route("/oauth2")
 def oauth2():
     code = request.args.get("code")
