@@ -96,6 +96,7 @@ Client
 
       :param Union[str, list[str]] scope: A list, or space-seperated string for the authorization scope
       :param Optional[str] state: State parameter. It is recommended for security.
+      :param Optional[bool] skip_prompt: Doesn't require the end user to reauthorize if they've already authorized you app before. Defaults to ``False``.
       :param Optional[Literal["code", "token"]] response_type: either code, or token. token means the server can't access it, but the client can use it without converting.
       :param Optional[Union[int, str]] guild_id: the guild ID to add a bot/webhook.
       :param Optional[bool] disable_guild_select: wether to allow the authorizing user to change the selected guild

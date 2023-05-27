@@ -256,11 +256,12 @@ class Client():
         else:
             raise exceptions.HTTPException(f"Unexpected HTTP {response.status_code}")
     
-    def generate_uri(self, scope: Union[str, list[str]], state: Optional[str]=None, response_type: Literal["code", "token"]="code", guild_id=None, disable_guild_select=None, permissions=None) -> str:
+    def generate_uri(self, scope: Union[str, list[str]], state: Optional[str]=None, skip_prompt: Optional[bool]=False, response_type: Optional[Literal["code", "token"]]="code", guild_id: Optional[Union[int, str]]=None, disable_guild_select: Optional[bool]=None, permissions: Optional[Union[int, str]]=None) -> str:
         """Creates an authorization uri with client information prefilled.
         
         scope: a string, or list of strings for the scope
         state: optional state parameter. Optional but recommended.
+        skip_prompt: doesn't require the end user to reauthorize if they've already authorized you app before. Defaults to `False`.
         response_type: either code, or token. token means the server can't access it, but the client can use it without converting.
         guild_id: the guild ID to add a bot/webhook.
         disable_guild_select: wether to allow the authorizing user to change the selected guild
@@ -271,6 +272,7 @@ class Client():
             "scope": " ".join(scope) if type(scope) == list else scope,
             "state": state,
             "redirect_uri": self.redirect_url,
+            "prompt": "none" if skip_prompt else None,
             "response_type": response_type,
             "guild_id": guild_id,
             "disable_guild_select": disable_guild_select,
