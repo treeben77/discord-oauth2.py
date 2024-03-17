@@ -16,7 +16,7 @@ pip install discord-oauth2.py
 Don't forget to replace all the client information with your application's own information. You can leave bot token empty if your not adding members to guilds.
 ```py
 import discordoauth2
-from flask import Flask, request
+from flask import Flask, request, redirect
 
 client = discordoauth2.Client(849930878276993044, secret="very-secret-code",
 redirect="https://findingfakeurlsisprettyhard.tv/oauth2", bot_token="bot-token-only-required-for-guild-joining-or-updating-linked-roles-metadata")
