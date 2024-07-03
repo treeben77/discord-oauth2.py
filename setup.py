@@ -18,6 +18,7 @@ setup(
     url='https://github.com/TreeBen77/discordoauth2',
     keywords='flask, oauth2, discord, discord-api',
     install_requires=[
-        'requests'
+        'aiohttp',
+        'requests',
     ]
 )
