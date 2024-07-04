@@ -6,7 +6,7 @@ from urllib import parse
 
 class AsyncPartialAccessToken:
     def __init__(self, access_token, client) -> None:
-        self.client: Client = client
+        self.client: AsyncClient = client
         self.token: str = access_token
 
     async def revoke(self):
@@ -126,7 +126,7 @@ class AsyncPartialAccessToken:
         async with aiohttp.ClientSession() as session:
             async with session.put(
                 f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}",
-                headers={"authorization": f"Bot {self.client._Client__bot_token}"},
+                headers={"authorization": f"Bot {self.client._AsyncClient__bot_token}"},
                 json={
                     "access_token": self.token,
                     "nick": nick,
