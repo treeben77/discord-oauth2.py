@@ -144,7 +144,7 @@ class AsyncPartialAccessToken:
                     return await response.json()
                 elif response.status == 401:
                     raise Exceptions.Forbidden(
-                        f"this AccessToken does not have the nessasary scope."
+                        f"this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 403:
                     raise Exceptions.Forbidden(
