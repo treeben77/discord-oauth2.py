@@ -377,7 +377,7 @@ class AsyncClient:
             async with session.post(
                 "https://discord.com/api/v10/oauth2/token",
                 data={"grant_type": "client_credentials", "scope": " ".join(scope)},
-                auth=(self.id, self.__secret),
+                auth=aiohttp.BasicAuth(str(self.id), self.__secret),
             ) as response:
                 if response.ok:
                     return AsyncAccessToken(await response.json(), self)
@@ -403,7 +403,7 @@ class AsyncClient:
             async with session.post(
                 "https://discord.com/api/oauth2/token/revoke",
                 data={"token": token, "token_type_hint": token_type},
-                auth=(self.id, self.__secret),
+                auth=aiohttp.BasicAuth(str(self.id), self.__secret),
             ) as response:
                 if response.ok:
                     return
