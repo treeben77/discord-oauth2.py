@@ -1,7 +1,10 @@
 import aiohttp
+
 from datetime import datetime
 from typing import Optional, Union, Literal
 from urllib import parse
+
+from .exceptions import Exceptions
 
 
 class AsyncPartialAccessToken:
@@ -25,16 +28,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def fetch_connections(self) -> list[dict]:
         """Retrieves a list of [connection object](https://discord.com/developers/docs/resources/user#connection-object)s the user has linked. Requires the `connections` scope"""
@@ -46,16 +49,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def fetch_guilds(self) -> list[dict]:
         """Retrieves a list of [partial guild](https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild)s the user is in. Requires the `guilds` scope"""
@@ -68,16 +71,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def fetch_guild_member(self, guild_id: int) -> dict:
         """Retrieves the user's [guild member object](https://discord.com/developers/docs/resources/guild#guild-member-object) in a specific guild. Requires the `guilds.members.read` scope
@@ -92,18 +95,18 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 404:
-                    raise exceptions.HTTPException(f"user is not in this guild.")
+                    raise Exceptions.HTTPException(f"user is not in this guild.")
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def join_guild(
         self,
@@ -138,22 +141,22 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 204:
-                    raise exceptions.HTTPException(f"member is already in the guild.")
+                    raise Exceptions.HTTPException(f"member is already in the guild.")
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 403:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"the Bot token must be for a bot in the guild that has permissions to create invites in the target guild and must have any other required permissions."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def fetch_metadata(self):
         """Retrieves the user's [metadata](https://discord.com/developers/docs/resources/user#application-role-connection-object) for this application. Requires the `role_connections.write` scope"""
@@ -165,16 +168,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def update_metadata(
         self, platform_name: str = None, username: str = None, **metadata
@@ -209,16 +212,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def clear_metadata(self):
         """Clears the user's metadata for this application. Requires the `role_connections.write` scope"""
@@ -231,16 +234,16 @@ class AsyncPartialAccessToken:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
 
 class AsyncAccessToken(AsyncPartialAccessToken):
@@ -288,16 +291,16 @@ class AsyncClient:
                 if response.ok:
                     return await response.json()
                 elif response.status == 401:
-                    raise exceptions.Forbidden(
+                    raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     def from_access_token(self, access_token: str) -> AsyncPartialAccessToken:
         """Creates a `PartialAccessToken` from a access token string.
@@ -325,16 +328,16 @@ class AsyncClient:
                 if response.ok:
                     return AsyncAccessToken(await response.json(), self)
                 elif response.status == 400:
-                    raise exceptions.HTTPException(
+                    raise Exceptions.HTTPException(
                         "the code, client id, client secret or the redirect uri is invalid/don't match."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def refresh_token(self, refresh_token: str) -> AsyncAccessToken:
         """Converts a refresh token into a new `AccessToken`
@@ -354,16 +357,16 @@ class AsyncClient:
                 if response.ok:
                     return AsyncAccessToken(await response.json(), self)
                 elif response.status == 400:
-                    raise exceptions.HTTPException(
+                    raise Exceptions.HTTPException(
                         "the refresh token, client id or client secret is invalid/don't match."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def client_credentails_grant(self, scope: list[str]) -> AsyncAccessToken:
         """Creates an `AccessToken` on behalf of the application's owner. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
@@ -379,16 +382,16 @@ class AsyncClient:
                 if response.ok:
                     return AsyncAccessToken(await response.json(), self)
                 elif response.status == 400:
-                    raise exceptions.HTTPException(
+                    raise Exceptions.HTTPException(
                         "the scope, client id or client secret is invalid/don't match."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     async def revoke_token(self, token: str, token_type: str = None):
         """Revokes a OAuth2 token related to the client.
@@ -405,16 +408,16 @@ class AsyncClient:
                 if response.ok:
                     return
                 elif response.status == 400:
-                    raise exceptions.HTTPException(
+                    raise Exceptions.HTTPException(
                         "the token or token type is invalid."
                     )
                 elif response.status == 429:
-                    raise exceptions.RateLimited(
+                    raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
 
     def generate_uri(
         self,
@@ -448,19 +451,3 @@ class AsyncClient:
             "permissions": permissions,
         }
         return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"
-
-
-class exceptions:
-    class BaseException(Exception):
-        pass
-
-    class HTTPException(BaseException):
-        pass
-
-    class RateLimited(HTTPException):
-        def __init__(self, text, retry_after):
-            self.retry_after = retry_after
-            super().__init__(text)
-
-    class Forbidden(HTTPException):
-        pass
