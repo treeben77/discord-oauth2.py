@@ -138,10 +138,10 @@ class AsyncPartialAccessToken:
                     "deaf": deaf,
                 },
             ) as response:
-                if response.ok:
-                    return await response.json()
-                elif response.status == 204:
+                if response.status == 204:
                     raise Exceptions.HTTPException(f"member is already in the guild.")
+                elif response.ok:
+                    return await response.json()
                 elif response.status == 401:
                     raise Exceptions.Forbidden(
                         f"this AccessToken does not have the nessasary scope."
