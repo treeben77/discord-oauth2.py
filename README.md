@@ -12,6 +12,7 @@ I've finally published the library to PyPi! So now you can use pip.
 ```
 pip install discord-oauth2.py
 ```
+
 ### Example With Flask
 Don't forget to replace all the client information with your application's own information. You can leave bot token empty if your not adding members to guilds.
 ```py
@@ -57,3 +58,6 @@ def oauth2():
 
 app.run("0.0.0.0", 8080)
 ```
+
+### Async usage
+Asynchronous usage is also supported, you can use the async version of the library by importing `discordoauth2.AsyncClient` instead of `discordoauth2.Client`. The methods are the same, but they’re coroutines.
