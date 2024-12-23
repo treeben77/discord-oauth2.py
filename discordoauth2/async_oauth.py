@@ -14,7 +14,9 @@ class AsyncPartialAccessToken:
 
     async def revoke(self):
         """Shorthand for `Client.revoke_token` with the `PartialAccessToken`'s access token."""
-        return await self.client.revoke_token(self.token, token_type="access_token")
+        return await self.client.revoke_token(
+            self.token, token_type="access_token"
+        )
 
     async def fetch_identify(self) -> dict:
         """Retrieves the user's [user object](https://discord.com/developers/docs/resources/user#user-object).
@@ -37,7 +39,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def fetch_connections(self) -> list[dict]:
         """Retrieves a list of [connection object](https://discord.com/developers/docs/resources/user#connection-object)s the user has linked. Requires the `connections` scope"""
@@ -58,7 +62,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def fetch_guilds(self) -> list[dict]:
         """Retrieves a list of [partial guild](https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild)s the user is in. Requires the `guilds` scope"""
@@ -80,7 +86,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def fetch_guild_member(self, guild_id: int) -> dict:
         """Retrieves the user's [guild member object](https://discord.com/developers/docs/resources/guild#guild-member-object) in a specific guild. Requires the `guilds.members.read` scope
@@ -99,14 +107,18 @@ class AsyncPartialAccessToken:
                         f"this AccessToken does not have the nessasary scope."
                     )
                 elif response.status == 404:
-                    raise Exceptions.HTTPException(f"user is not in this guild.")
+                    raise Exceptions.HTTPException(
+                        f"user is not in this guild."
+                    )
                 elif response.status == 429:
                     raise Exceptions.RateLimited(
                         f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def join_guild(
         self,
@@ -129,7 +141,9 @@ class AsyncPartialAccessToken:
         async with aiohttp.ClientSession() as session:
             async with session.put(
                 f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}",
-                headers={"authorization": f"Bot {self.client._AsyncClient__bot_token}"},
+                headers={
+                    "authorization": f"Bot {self.client._AsyncClient__bot_token}"
+                },
                 json={
                     "access_token": self.token,
                     "nick": nick,
@@ -139,7 +153,9 @@ class AsyncPartialAccessToken:
                 },
             ) as response:
                 if response.status == 204:
-                    raise Exceptions.HTTPException(f"member is already in the guild.")
+                    raise Exceptions.HTTPException(
+                        f"member is already in the guild."
+                    )
                 elif response.ok:
                     return await response.json()
                 elif response.status == 401:
@@ -156,7 +172,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def fetch_metadata(self):
         """Retrieves the user's [metadata](https://discord.com/developers/docs/resources/user#application-role-connection-object) for this application. Requires the `role_connections.write` scope"""
@@ -177,7 +195,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def update_metadata(
         self, platform_name: str = None, username: str = None, **metadata
@@ -205,7 +225,8 @@ class AsyncPartialAccessToken:
                     "platform_name": platform_name,
                     "platform_username": username,
                     "metadata": {
-                        key: metadataTypeHook(value) for key, value in metadata.items()
+                        key: metadataTypeHook(value)
+                        for key, value in metadata.items()
                     },
                 },
             ) as response:
@@ -221,7 +242,9 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def clear_metadata(self):
         """Clears the user's metadata for this application. Requires the `role_connections.write` scope"""
@@ -243,13 +266,16 @@ class AsyncPartialAccessToken:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
 
 class AsyncAccessToken(AsyncPartialAccessToken):
     def __init__(self, data, client) -> None:
         super().__init__(data["access_token"], client)
 
+        self.id_token: Optional[str] = data.get("id_token")
         self.expires: int = data.get("expires_in")
         self.scope: list[str] = data.get("scope", "").split(" ")
         self.refresh_token: str = data.get("refresh_token")
@@ -264,7 +290,9 @@ class AsyncAccessToken(AsyncPartialAccessToken):
 
 
 class AsyncClient:
-    def __init__(self, id: int, secret: str, redirect: str, bot_token: str = None):
+    def __init__(
+        self, id: int, secret: str, redirect: str, bot_token: str = None
+    ):
         """Represents a Discord Application. Create an application on the [Developer Portal](https://discord.com/developers/applications)
 
         id: The application's ID
@@ -300,7 +328,9 @@ class AsyncClient:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     def from_access_token(self, access_token: str) -> AsyncPartialAccessToken:
         """Creates a `PartialAccessToken` from a access token string.
@@ -337,7 +367,9 @@ class AsyncClient:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def refresh_token(self, refresh_token: str) -> AsyncAccessToken:
         """Converts a refresh token into a new `AccessToken`
@@ -366,9 +398,13 @@ class AsyncClient:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
-    async def client_credentails_grant(self, scope: list[str]) -> AsyncAccessToken:
+    async def client_credentails_grant(
+        self, scope: list[str]
+    ) -> AsyncAccessToken:
         """Creates an `AccessToken` on behalf of the application's owner. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
 
         scope: list of string scopes to authorize.
@@ -376,7 +412,10 @@ class AsyncClient:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://discord.com/api/v10/oauth2/token",
-                data={"grant_type": "client_credentials", "scope": " ".join(scope)},
+                data={
+                    "grant_type": "client_credentials",
+                    "scope": " ".join(scope),
+                },
                 auth=aiohttp.BasicAuth(str(self.id), self.__secret),
             ) as response:
                 if response.ok:
@@ -391,7 +430,9 @@ class AsyncClient:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     async def revoke_token(self, token: str, token_type: str = None):
         """Revokes a OAuth2 token related to the client.
@@ -417,7 +458,9 @@ class AsyncClient:
                         retry_after=response.json()["retry_after"],
                     )
                 else:
-                    raise Exceptions.HTTPException(f"Unexpected HTTP {response.status}")
+                    raise Exceptions.HTTPException(
+                        f"Unexpected HTTP {response.status}"
+                    )
 
     def generate_uri(
         self,
