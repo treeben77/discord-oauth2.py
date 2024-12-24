@@ -265,8 +265,6 @@ class AccessToken(PartialAccessToken):
     def __init__(self, data, client) -> None:
         super().__init__(data["access_token"], client)
 
-        print(data)
-
         self.id_token: Optional[str] = data.get("id_token")
         self.expires: int = data.get("expires_in")
         self.scope: list[str] = data.get("scope", "").split(" ")
