@@ -27,7 +27,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -50,7 +50,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -74,7 +74,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -100,7 +100,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 404:
             raise Exceptions.HTTPException(f"user is not in this guild.")
@@ -127,10 +127,10 @@ class PartialAccessToken:
 
         guild_id: The guild ID to add the user to
         user_id: The ID of the user. Retrievable with `PartialAccessToken.fetch_identify()['id']`
-        nick: The nickname to give the user apon joining. Bot must also have `MANAGE_NICKNAMES`
-        role_ids: A list of role IDs to give the user apon joining (bypasses Membership Screening). Bot must also have `MANAGE_ROLES`
-        mute: Wether the user is muted in voice channels apon joining. Bot must also have `MUTE_MEMBERS`
-        deaf: Wether the user is deaf in voice channels apon joining. Bot must also have `DEAFEN_MEMBERS`
+        nick: The nickname to give the user upon joining. Bot must also have `MANAGE_NICKNAMES`
+        role_ids: A list of role IDs to give the user upon joining (bypasses Membership Screening). Bot must also have `MANAGE_ROLES`
+        mute: Wether the user is muted in voice channels upon joining. Bot must also have `MUTE_MEMBERS`
+        deaf: Wether the user is deaf in voice channels upon joining. Bot must also have `DEAFEN_MEMBERS`
         """
         response = requests.put(
             f"https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}",
@@ -150,7 +150,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 403:
             raise Exceptions.Forbidden(
@@ -177,7 +177,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -224,7 +224,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -248,7 +248,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -307,7 +307,7 @@ class Client:
         )
 
     def from_access_token(self, access_token: str) -> PartialAccessToken:
-        """Creates a `PartialAccessToken` from a access token string.
+        """Creates a `PartialAccessToken` from an access token string.
 
         access_token: access token from `PartialAccessToken.token`
         """
@@ -316,7 +316,7 @@ class Client:
     def exchange_code(self, code: str) -> AccessToken:
         """Converts a code from the redirect url into a `AccessToken`
 
-        code: `code` paramater from OAuth2 redirect URL
+        code: `code` parameter from OAuth2 redirect URL
         """
         response = requests.post(
             "https://discord.com/api/v10/oauth2/token",
@@ -376,7 +376,7 @@ class Client:
                 f"Unexpected HTTP {response.status_code}"
             )
 
-    def client_credentails_grant(self, scope: list[str]) -> AccessToken:
+    def client_credentials_grant(self, scope: list[str]) -> AccessToken:
         """Creates an `AccessToken` on behalf of the application's owner. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
 
         scope: list of string scopes to authorize.
@@ -421,7 +421,7 @@ class Client:
             return
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the nessasary scope."
+                f"this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
