@@ -376,6 +376,16 @@ class Client:
                 f"Unexpected HTTP {response.status_code}"
             )
 
+    def client_credentails_grant(self, scope: list[str] = None) -> AccessToken:
+        """Creates an `AccessToken` on behalf of the application. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
+
+        *Identical to `client_credentials_grant` but with a typo for backwards compatibility.*
+
+        scope: list of string scopes to authorize.
+        """
+
+        return self.client_credentials_grant(scope)
+
     def client_credentials_grant(self, scope: list[str]) -> AccessToken:
         """Creates an `AccessToken` on behalf of the application's owner. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
 
@@ -466,5 +476,7 @@ class Client:
             "permissions": permissions,
         }
         if "applications.commands" in scope:
-            params["integration_type"] = 0 if integration_type == "guild" else 1
+            params["integration_type"] = (
+                0 if integration_type == "guild" else 1
+            )
         return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"

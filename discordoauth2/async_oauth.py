@@ -402,6 +402,18 @@ class AsyncClient:
                         f"Unexpected HTTP {response.status}"
                     )
 
+    async def client_credentails_grant(
+        self, scope: list[str] = None
+    ) -> AsyncAccessToken:
+        """Creates an `AccessToken` on behalf of the application. If the owner is a team, then only `identify` and `applications.commands.update` are allowed.
+
+        *Identical to `client_credentials_grant` but with a typo for backwards compatibility.*
+
+        scope: list of string scopes to authorize.
+        """
+
+        return await self.client_credentials_grant(scope)
+
     async def client_credentials_grant(
         self, scope: list[str]
     ) -> AsyncAccessToken:
@@ -495,5 +507,7 @@ class AsyncClient:
             "permissions": permissions,
         }
         if "applications.commands" in scope:
-            params["integration_type"] = 0 if integration_type == "guild" else 1
+            params["integration_type"] = (
+                0 if integration_type == "guild" else 1
+            )
         return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"
