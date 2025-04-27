@@ -465,6 +465,6 @@ class Client:
             "disable_guild_select": disable_guild_select,
             "permissions": permissions,
         }
-        if "application.commands" in scope:
+        if "applications.commands" in scope:
             params["integration_type"] = 0 if integration_type == "guild" else 1
         return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"
