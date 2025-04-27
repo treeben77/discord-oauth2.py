@@ -37,7 +37,7 @@ AccessToken
    
    .. attribute:: webhook
 
-      A `parital webhook object <https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-structure>`__ if they was a ``webhook.incoming`` scope.
+      A `partial webhook object <https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-structure>`__ if they was a ``webhook.incoming`` scope.
 
       :type: dict
    
@@ -94,7 +94,7 @@ AccessToken
       :param str nick: The nickname the member should have when they join.
       :param list[int] role_ids: a List of role IDs to assign them when they join.
       :param bool mute: Wether they should be server muted when they join.
-      :param bool deaf: Wether they should be server deafend when they join.
+      :param bool deaf: Wether they should be server deafened when they join.
       
       :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed
@@ -122,8 +122,8 @@ AccessToken
    
       .. versionadded:: 1.1
 
-      :param str platform_name: Text that appears at the top of the app connection box, usally denoting the platform's name.
-      :param str platform_username: Text that appears under the platform name, large, and usally denoting the user's name on the platform.
+      :param str platform_name: Text that appears at the top of the app connection box, usually denoting the platform's name.
+      :param str platform_username: Text that appears under the platform name, large, and usually denoting the user's name on the platform.
       :param dict metadata: List of keys and values to set the user's metadata. Supported types: :class:`bool`, :class:`datetime.datetime`, :class:`int`
             
       :returns: dict
@@ -227,7 +227,7 @@ AccessToken
       :param str nick: The nickname the member should have when they join.
       :param list[int] role_ids: a List of role IDs to assign them when they join.
       :param bool mute: Wether they should be server muted when they join.
-      :param bool deaf: Wether they should be server deafend when they join.
+      :param bool deaf: Wether they should be server deafened when they join.
       
       :returns: dict
       :raises discordoauth2.exceptions.HTTPException: The request failed
@@ -251,8 +251,8 @@ AccessToken
    
       .. versionadded:: 1.1
 
-      :param str platform_name: Text that appears at the top of the app connection box, usally denoting the platform's name.
-      :param str platform_username: Text that appears under the platform name, large, and usally denoting the user's name on the platform.
+      :param str platform_name: Text that appears at the top of the app connection box, usually denoting the platform's name.
+      :param str platform_username: Text that appears under the platform name, large, and usually denoting the user's name on the platform.
       :param dict metadata: List of keys and values to set the user's metadata. Supported types: :class:`bool`, :class:`datetime.datetime`, :class:`int`
             
       :returns: dict

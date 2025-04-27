@@ -8,7 +8,7 @@ Client
    :param int id: The application ID
    :param str secret: The applications secret, this should be secret!
    :param str redirect: The redirect URL for oauth2
-   :param str bot_token: When adding a user to a guild, a bot with sufficent permissions is required. if you're not going to add members to a guild leave this empty.
+   :param str bot_token: When adding a user to a guild, a bot with sufficient permissions is required. if you're not going to add members to a guild leave this empty.
 
    .. attribute:: id 
 
@@ -26,7 +26,7 @@ Client
 
       Creates a :class:`discordoauth2.PartialAccessToken` object from a code. This is useful so you can store the :attr:`PartialAccessToken.token` and then continue using it.
    
-      :param str access_token: The code from oauth2, it is the code paramater on successful return redirect urls from discord's oauth2.
+      :param str access_token: The code from oauth2, it is the code parameter on successful return redirect urls from discord's oauth2.
       
       :returns: :class:`discordoauth2.PartialAccessToken`
    
@@ -34,10 +34,10 @@ Client
 
       Converts a code from the redirect url into a :class:`discordoauth2.AccessToken`
    
-      :param str code: `code` paramater from OAuth2 redirect URL
+      :param str code: `code` parameter from OAuth2 redirect URL
       
       :returns: :class:`discordoauth2.AccessToken`
-      :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
+      :raises discordoauth2.exceptions.HTTPException: The request failed, usually because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
    .. method:: refresh_token(refresh_token)
@@ -47,17 +47,17 @@ Client
       :param str refresh_token: The refresh token, can be found from :attr:`discordoauth2.AccessToken.refresh_token`
 
       :returns: :class:`discordoauth2.AccessToken`
-      :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
+      :raises discordoauth2.exceptions.HTTPException: The request failed, usually because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
-   .. method:: client_credentails_grant(scope)
+   .. method:: client_credentials_grant(scope)
 
       Creates an :class:`discordoauth2.AccessToken` on behalf of the application's owner.
    
       :param list[str] scope: List of scopes.
 
       :returns: :class:`discordoauth2.AccessToken`
-      :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
+      :raises discordoauth2.exceptions.HTTPException: The request failed, usually because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
    .. warning::
@@ -73,7 +73,7 @@ Client
       :param str token: Access/Refresh token to revoke
       :param Optional[str] token_type: Not required, but should be either ``refresh_token`` or ``access_token``
 
-      :raises discordoauth2.exceptions.HTTPException: The request failed, usally because the client ID, client, secret, redirect or code is incorrect
+      :raises discordoauth2.exceptions.HTTPException: The request failed, usually because the client ID, client, secret, redirect or code is incorrect
       :raises discordoauth2.exceptions.RateLimited: You're being rate limited.
    
    .. method:: update_linked_roles_metadata(metadata)
@@ -94,7 +94,7 @@ Client
 
       .. versionadded:: 1.2
 
-      :param Union[str, list[str]] scope: A list, or space-seperated string for the authorization scope
+      :param Union[str, list[str]] scope: A list, or space-separated string for the authorization scope
       :param Optional[str] state: State parameter. It is recommended for security.
       :param Optional[bool] skip_prompt: Doesn't require the end user to reauthorize if they've already authorized you app before. Defaults to ``False``.
       :param Optional[Literal["code", "token"]] response_type: either code, or token. token means the server can't access it, but the client can use it without converting.
