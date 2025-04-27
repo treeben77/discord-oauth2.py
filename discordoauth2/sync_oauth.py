@@ -438,6 +438,7 @@ class Client:
         scope: Union[str, list[str]],
         state: Optional[str] = None,
         skip_prompt: Optional[bool] = False,
+        integration_type: Optional[Literal["guild", "user"]] = "user",
         response_type: Optional[Literal["code", "token"]] = "code",
         guild_id: Optional[Union[int, str]] = None,
         disable_guild_select: Optional[bool] = None,
@@ -464,4 +465,6 @@ class Client:
             "disable_guild_select": disable_guild_select,
             "permissions": permissions,
         }
+        if "application.commands" in scope:
+            params["integration_type"] = 0 if integration_type == "guild" else 1
         return f"https://discord.com/oauth2/authorize?{parse.urlencode({key: value for key, value in params.items() if value is not None})}"
