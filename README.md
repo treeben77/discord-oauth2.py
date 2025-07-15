@@ -60,4 +60,4 @@ app.run("0.0.0.0", 8080)
 ```
 
 ### Async usage
-Asynchronous usage is also supported, you can use the async version of the library by importing `discordoauth2.AsyncClient` instead of `discordoauth2.Client`. The methods are the same, but they’re coroutines.
+Asynchronous usage is also supported, you can use the async version of the library by importing [`discordoauth2.AsyncClient`](https://github.com/treeben77/discord-oauth2.py/blob/main/discordoauth2/sync_oauth.py) instead of [`discordoauth2.Client`](https://github.com/treeben77/discord-oauth2.py/blob/main/discordoauth2/async_oauth.py]. The methods are the same, but they’re coroutines.
