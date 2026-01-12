@@ -27,7 +27,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -50,7 +50,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -74,7 +74,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -100,10 +100,10 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 404:
-            raise Exceptions.HTTPException(f"user is not in this guild.")
+            raise Exceptions.HTTPException("user is not in this guild.")
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
                 f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
@@ -145,16 +145,16 @@ class PartialAccessToken:
         )
 
         if response.status_code == 204:
-            raise Exceptions.HTTPException(f"member is already in the guild.")
+            raise Exceptions.HTTPException("member is already in the guild.")
         elif response.ok:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 403:
             raise Exceptions.Forbidden(
-                f"the Bot token must be for a bot in the guild that has permissions to create invites in the target guild and must have any other required permissions."
+                "the Bot token must be for a bot in the guild that has permissions to create invites in the target guild and must have any other required permissions."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -177,7 +177,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -200,9 +200,9 @@ class PartialAccessToken:
         """
 
         def metadataTypeHook(item):
-            if type(item) == bool:
+            if isinstance(item, bool):
                 return 1 if item else 0
-            if type(item) == datetime:
+            if isinstance(item, datetime):
                 return item.isoformat()
             else:
                 return item
@@ -224,7 +224,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -248,7 +248,7 @@ class PartialAccessToken:
             return response.json()
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -431,7 +431,7 @@ class Client:
             return
         elif response.status_code == 401:
             raise Exceptions.Forbidden(
-                f"this AccessToken does not have the necessary scope."
+                "this AccessToken does not have the necessary scope."
             )
         elif response.status_code == 429:
             raise Exceptions.RateLimited(
@@ -466,7 +466,7 @@ class Client:
         """
         params = {
             "client_id": self.id,
-            "scope": " ".join(scope) if type(scope) == list else scope,
+            "scope": " ".join(scope) if isinstance(scope, list) else scope,
             "state": state,
             "redirect_uri": self.redirect_url,
             "prompt": "none" if skip_prompt else None,
