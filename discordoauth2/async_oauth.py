@@ -34,9 +34,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -57,9 +58,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -81,9 +83,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -111,9 +114,10 @@ class AsyncPartialAccessToken:
                         "user is not in this guild."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -167,9 +171,10 @@ class AsyncPartialAccessToken:
                         "the Bot token must be for a bot in the guild that has permissions to create invites in the target guild and must have any other required permissions."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -190,9 +195,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -237,9 +243,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -261,9 +268,10 @@ class AsyncPartialAccessToken:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -323,9 +331,10 @@ class AsyncClient:
                         "this AccessToken does not have the necessary scope."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -362,9 +371,10 @@ class AsyncClient:
                         "the code, client id, client secret or the redirect uri is invalid/don't match."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -393,9 +403,10 @@ class AsyncClient:
                         "the refresh token, client id or client secret is invalid/don't match."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -437,9 +448,10 @@ class AsyncClient:
                         "the scope, client id or client secret is invalid/don't match."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
@@ -465,9 +477,10 @@ class AsyncClient:
                         "the token or token type is invalid."
                     )
                 elif response.status == 429:
+                    retry_after = (await response.json())['retry_after']
                     raise Exceptions.RateLimited(
-                        f"You are being Rate Limited. Retry after: {response.json()['retry_after']}",
-                        retry_after=response.json()["retry_after"],
+                        f"You are being Rate Limited. Retry after: {retry_after}",
+                        retry_after=retry_after,
                     )
                 else:
                     raise Exceptions.HTTPException(
